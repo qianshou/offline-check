@@ -42,7 +42,7 @@
                 <form class="am-form" onsubmit="return textHash()">
                     <fieldset>
                         <div class="am-form-group">
-                            <textarea class="" rows="10" id="text-content"></textarea>
+                            <textarea class="" rows="20" id="text-content"></textarea>
                         </div>
                         <p><button type="submit" class="am-btn am-btn-default" id="text-submit">获取哈希</button></p>
                     </fieldset>
@@ -99,6 +99,8 @@
         $("#file-res").text(res);
         $("#file-body").show();
     }
+    const config = require('../config/index');
+    const {ipcRenderer} = require('electron');
     //通过ipc通信，在后台对文本进行sha256加密
     function textHash() {
         const plaintext = $('#text-content').val();
@@ -107,8 +109,8 @@
             return false;
         }
         $("#text-submit").addClass('am-disabled');
-        var ipcText = {'data':plaintext,'hash':'sha256'};
-        const {ipcRenderer} = require('electron');
+
+        var ipcText = {'data':plaintext,'hash':config.hash};
         ipcRenderer.send('plaintext', ipcText);
         ipcRenderer.on('ciphertext', (event, arg) => {
             textDisplay(arg);
@@ -120,8 +122,7 @@
         var obj = document.getElementById("doc-form-file");
         if(obj.value){
             const path = obj.files[0].path;
-            var ipcFile = {'path':path,'hash':'sha256'};
-            const {ipcRenderer} = require('electron');
+            var ipcFile = {'path':path,'hash':config.hash};
             ipcRenderer.send('filepath', ipcFile);
             ipcRenderer.on('fileres', (event, arg) => {
                 fileDisplay(arg);
