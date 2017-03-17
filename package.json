@@ -8,8 +8,5 @@
 	"package": "electron-packager ./ --arch=x64 --electron-version=1.4.13 --icon=./favicon.ico --overwrite" 
   },
   "author": "zhezhao",
-  "license": "ISC",
-  "devDependencies": {
-	"electron-packager": "^8.5.2"
-  }
+  "license": "ISC"
 }

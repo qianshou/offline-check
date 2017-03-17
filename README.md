@@ -1,12 +1,6 @@
 # offline-check
 数字档案离线验证工具
 
-# 功能
-
-1. 文本哈希值计算
-
-2. 文件哈希值计算
-
 # 技术细节
 
 该工具基于electron V1.4.13 编写，采用electron-packager V8.5.2打包发布。
@@ -20,3 +14,25 @@
 文件哈希并没有上传文件，而仅仅是前端将获取到的文件路径通过ipc传递给了main-process处理。
 
 jquery的高版本不能在electron中运行，要使用 <= 1.9.1的版本。
+
+# 功能
+
+1. 文本哈希值计算
+
+2. 文件哈希值计算
+
+# 配置和执行
+
+环境配置
+```shell
+npm install electron -g
+npm install electron-packager -g
+```
+运行文件
+```shell
+npm start
+```
+发布文件
+```shell
+npm run package
+```
