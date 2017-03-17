@@ -1,0 +1,137 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>数字档案离线验证工具</title>
+    <link rel="stylesheet" href="assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+<div class="am-g">
+    <div class="am-u-sm-3 left-container">
+        <div class="left-header">
+            <h2>数字档案离线验证工具 V1.0</h2>
+        </div>
+
+        <div class="left-menu">
+
+            <ul class="am-nav">
+                <li class="menu-item am-nav-header"><a href="javascript:displayIndex()">文本验证</a></li>
+                <li class="menu-item am-nav-header"><a href="javascript:displayFile()">文件验证</a></li>
+                <li class="menu-item am-nav-header"><a href="javascript:displayAbout()">关于我们</a></li>
+            </ul>
+
+        </div>
+
+        <div class="left-footer">
+            <p>
+                <small>中国科学院</small>
+                <br/>
+                <small>合肥物质科学研究院</small>
+            </p>
+        </div>
+    </div>
+    <div class="am-u-sm-9 right-container">
+
+        <div class="am-g" id="text-container">
+            <div class="am-u-sm-10 am-u-sm-offset-1 am-u-end">
+                <form class="am-form" onsubmit="return textHash()">
+                    <fieldset>
+                        <div class="am-form-group">
+                            <textarea class="" rows="10" id="text-content"></textarea>
+                        </div>
+                        <p><button type="submit" class="am-btn am-btn-default" id="text-submit">获取哈希</button></p>
+                    </fieldset>
+                </form>
+                <div id="text-body" style="display: none;">
+                    <p>哈希结果：</p>
+                    <p><strong id="text-res"></strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="am-g" id="file-container">
+            <div class="am-u-sm-10 am-u-sm-offset-1 am-u-end">
+                <form action="#" onsubmit="return fileHash();">
+                    <div class="am-g">
+                        <div class="am-form-group am-form-file am-u-sm-4" >
+                            <button type="button" class="am-btn am-btn-default am-btn-lg">
+                                <i class="am-icon-cloud-upload"></i> 选择文件
+                            </button>
+                            <input id="doc-form-file" type="file" name="avatar">
+                        </div>
+                        <div class="am-u-sm-8 am-u-end" id="file-list"></div>
+                    </div>
+                    <div>
+                        <input type="submit" class="am-btn am-btn-success am-btn-lg" value="获取哈希">
+                    </div>
+                </form>
+                <div id="file-body" style="margin-top: 50px;display: none;">
+                    <p>哈希结果：</p>
+                    <p><strong id="file-res"></strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="am-g" id="about-container">
+            <div class="am-u-sm-10 am-u-sm-offset-1 am-u-end">
+                <p>数字档案离线验证工具 V1.0</p>
+                <p>联系邮箱：xxxxxx@163.com</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="assets/js/jquery-1.9.1.min.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+    //文本哈希结果展示
+    function textDisplay(res) {
+        $("#text-res").text(res);
+        $("#text-body").show();
+    }
+    //文件哈希结果展示
+    function fileDisplay(res) {
+        $("#file-res").text(res);
+        $("#file-body").show();
+    }
+    //通过ipc通信，在后台对文本进行sha256加密
+    function textHash() {
+        const plaintext = $('#text-content').val();
+        if(plaintext == ''){
+            textDisplay('输入不能为空');
+            return false;
+        }
+        $("#text-submit").addClass('am-disabled');
+        var ipcText = {'data':plaintext,'hash':'sha256'};
+        const {ipcRenderer} = require('electron');
+        ipcRenderer.send('plaintext', ipcText);
+        ipcRenderer.on('ciphertext', (event, arg) => {
+            textDisplay(arg);
+        });
+        return false;
+    }
+    //ipc通信，只传送文件的本地路径，不进行上传
+    function fileHash() {
+        var obj = document.getElementById("doc-form-file");
+        if(obj.value){
+            const path = obj.files[0].path;
+            var ipcFile = {'path':path,'hash':'sha256'};
+            const {ipcRenderer} = require('electron');
+            ipcRenderer.send('filepath', ipcFile);
+            ipcRenderer.on('fileres', (event, arg) => {
+                fileDisplay(arg);
+            });
+        }else{
+            fileDisplay("请先选择文件");
+        }
+        return false;
+    }
+    console.log('欢迎使用离线验证工具');
+</script>
+</body>
+</html>

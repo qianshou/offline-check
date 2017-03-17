@@ -1,0 +1,40 @@
+/* Write your styles */
+.left-container{
+    border-right:2px solid hsl(0,0%,88%);
+    height: 780px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.left-menu{
+    height: 500px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 100px;
+    border-top:2px solid hsl(0,0%,88%);
+    border-bottom:2px solid hsl(0,0%,88%);
+}
+.menu-item{
+    line-height: 30px;
+}
+.left-header{
+    height: 100px;
+    padding-top: 30px;
+    padding-bottom: 40px;
+    text-align: center;
+}
+.left-footer{
+    height: 170px;
+    padding-top: 80px;
+    padding-bottom: 40px;
+    text-align: center;
+}
+.right-container{
+    padding-top: 100px;
+    padding-left: 20px;
+}
+#file-container{
+    padding-top: 150px;
+}
+#about-container{
+    padding-top: 150px;
+}
